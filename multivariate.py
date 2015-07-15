@@ -20,18 +20,17 @@ df['interest_rate'] = df['interest_rate'].apply(lambda x: float(x[:-1]))
 
 #using monthly income (instead of annual) to model interest rates
 X = sm.add_constant(df['monthly_income'])
-Y = sm.add_constant(df['home_ownership'])
 est = sm.OLS(df['interest_rate'], X).fit()
-
-est.summary()
-
-
-est = sm.OLS(df['interest_rate + home_ownership'], ).fit()
 
 est.summary()
 
 import statsmodels.formula.api as smf
 
-est = smf.ols(formula='interest ~ monthly_income + home_ownership', data=df).fit()
+est = smf.ols(formula='interest_rate ~ monthly_income + home_ownership', data=df).fit()
+
+est.summary()
+
+# interaction is what is the relationship with both of the variables are interacting together
+est = smf.ols(formula='interest_rate ~ monthly_income * home_ownership', data=df).fit()
 
 est.summary()
