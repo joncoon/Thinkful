@@ -12,22 +12,26 @@ loansData.columns = loansData.columns.map(lambda x: x.replace('.', '_').lower())
 #drop null values from the following rows using .dropna
 df = loansData.dropna(subset=['home_ownership', 'interest_rate', 'monthly_income'])
 
-print loansData.head ()
-
 #remove % symbol from interest rate and convert to float. Several different ways to do this:
 #loansData['Interest.Rate'] = [float(interest[0:-1])/100 for interest in loansData['Interest.Rate']]
 #df['interest_rate'] = df['interest_rate'].apply(lambda x: float(str(x).rstrip('%')))
 
-loansData['interest.rate'] = loansData['interestrate'].apply(lambda x: float(x[:-1]))
+df['interest_rate'] = df['interest_rate'].apply(lambda x: float(x[:-1]))
 
-print loansData.head ()
+#using monthly income (instead of annual) to model interest rates
+X = sm.add_constant(df['monthly_income'])
+Y = sm.add_constant(df['home_ownership'])
+est = sm.OLS(df['interest_rate'], X).fit()
 
-loansData['interest_rate'] = loansData['interest_rate'].apply(lambda x: float(str(x).rstrip('%')))
-
-print loansData.head ()
+est.summary()
 
 
-X = sm.add_constant(loansData['monthly_income'])
-est = sm.OLS(loansData['interest_rate'], X).fit()
+est = sm.OLS(df['interest_rate + home_ownership'], ).fit()
+
+est.summary()
+
+import statsmodels.formula.api as smf
+
+est = smf.ols(formula='interest ~ monthly_income + home_ownership', data=df).fit()
 
 est.summary()
