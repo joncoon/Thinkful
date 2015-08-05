@@ -4,7 +4,7 @@ import sqlite3 as lite
 import datetime
 
 
-apikey = '2e2f577ca9f8eb244e19aa4594cc1744'
+apikey = '2e2f577ca9f8eb244e19aa4594cc1744/'
 
 url = 'https://api.forecast.io/forecast/' + apikey
 
@@ -27,7 +27,8 @@ cur = con.cursor()
 
 cities.keys()
 with con:
-	cur.execute('CREATE TABLE daily_temp ( day_of_reading INT, San Franciscio REAL, Seattle REAL, Philadelphia REAL, Denver REAL, Miami REAL)')
+	cur.execute("DROP TABLE IF EXISTS daily_temp")
+	cur.execute('CREATE TABLE daily_temp ( day_of_reading INT, San Francisco REAL, Seattle REAL, Philadelphia REAL, Denver REAL, Miami REAL)')
 
 query_date = end_date - datetime.timedelta(days=30) #the current value being processed
 
